@@ -1,0 +1,622 @@
+{
+	"info": {
+		"_postman_id": "e785d10a-3016-4441-b76a-a0b9bd87f76f",
+		"name": "Sudoku",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26358114"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\": \"Name\",\r\n    \"lastname\": \"Lastname\",\r\n    \"username\": \"nala\",\r\n    \"nickname\": \"Nala\",\r\n    \"password\": \"Password1\",\r\n    \"email\": \"nala@emai.com\",\r\n    \"phonenumber\": \"\",\r\n    \"roles\": [\r\n        \"Player\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Host}}/api/authentication",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"authentication"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"AccessToken\", jsonData.accessToken);\r",
+									"pm.collectionVariables.set(\"RefreshToken\", jsonData.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"nala\",\r\n    \"password\": \"Password1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Host}}/api/authentication/login",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"authentication",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"AccessToken\", jsonData.accessToken);\r",
+									"pm.collectionVariables.set(\"RefreshToken\", jsonData.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accessToken\": \"{{AccessToken}}\",\r\n    \"refreshToken\": \"{{RefreshToken}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Host}}/api/token/refresh",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"token",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Games",
+			"item": [
+				{
+					"name": "Create new game",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"GameId\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{Host}}/api/games",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get game by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Host}}/api/games/{{GameId}}",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"games",
+								"{{GameId}}"
+							]
+						},
+						"description": "Get game (solution) by game ID"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Games",
+			"item": [
+				{
+					"name": "Play next available game for user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"GameId\", jsonData.id);\r",
+									"pm.collectionVariables.set(\"GameSolution\", jsonData.solution);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{Host}}/api/user_game/",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"user_game",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all games for user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Host}}/api/user_game/?MinScore=5&MaxScore=100&UnfinishedGames=true&ValidScoreRange=false&PageNumber=1&PageSize=5&OrderBy=createdAt desc",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"user_game",
+								""
+							],
+							"query": [
+								{
+									"key": "MinScore",
+									"value": "5"
+								},
+								{
+									"key": "MaxScore",
+									"value": "100"
+								},
+								{
+									"key": "MinFinishedAt",
+									"value": "2023-06-15T12:00:00",
+									"disabled": true
+								},
+								{
+									"key": "MaxFinishedAt",
+									"value": "2023-06-20T12:00:00",
+									"disabled": true
+								},
+								{
+									"key": "UnfinishedGames",
+									"value": "true"
+								},
+								{
+									"key": "ValidScoreRange",
+									"value": "false"
+								},
+								{
+									"key": "PageNumber",
+									"value": "1"
+								},
+								{
+									"key": "PageSize",
+									"value": "5"
+								},
+								{
+									"key": "OrderBy",
+									"value": "createdAt desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get game for user by game ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Host}}/api/user_game/{{GameId}}",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"user_game",
+								"{{GameId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check solution",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"solution\": \"{{GameSolution}}\",\r\n    \"_solution\": \"AgcDCQYEAQgFBggEAQcFAwIJAQkFCAIDBgQHAwUIAgQGCQcBBAIJBQEHCAYDBwYBAwkIBAUCCAEGBwUJAgMECQMHBAgCBQEGBQQCBgMBBwkI\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Host}}/api/user_game/{{GameId}}/solution",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"user_game",
+								"{{GameId}}",
+								"solution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save solution",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n    \"op\": \"replace\",\r\n    \"path\": \"/solution\",\r\n    \"value\": \"CAQHAQIJAwUGAgEDBQYHCAQJBQYJAwQIAQIHBgUECQgDBwECBwMBAgUGBAkICQIIBAcBBgMFAQgFBgMCCQcEAwcCCAkEBQYBBAkGBwEFAggD\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Host}}/api/user_game/{{GameId}}",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"user_game",
+								"{{GameId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save solution (with values from PlayNextGame)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json-patch+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/solution\",\r\n        \"value\": \"{{GameSolution}}\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Host}}/api/user_game/{{GameId}}",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"user_game",
+								"{{GameId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Hughscores",
+			"item": [
+				{
+					"name": "Highscores request",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cache-Control",
+								"value": "no-cache",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "If-Match",
+								"value": "\"A4EF9E45CABB871175D3E85E89F93D63\"",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{Host}}/api/highscores",
+							"host": [
+								"{{Host}}"
+							],
+							"path": [
+								"api",
+								"highscores"
+							],
+							"query": [
+								{
+									"key": "MinFinishedAt",
+									"value": "2023-06-22T17:25:28.323",
+									"disabled": true
+								},
+								{
+									"key": "MaxFinishedAt",
+									"value": "2023-06-22T17:25:28.323",
+									"disabled": true
+								},
+								{
+									"key": "PageNumber",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "PageSize",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "OrderBy",
+									"value": "lastPlayedDate desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Host",
+			"value": "https://localhost:7050",
+			"type": "string"
+		},
+		{
+			"key": "AccessToken",
+			"value": ""
+		},
+		{
+			"key": "RefreshToken",
+			"value": ""
+		},
+		{
+			"key": "GameSolution",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "GameId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
