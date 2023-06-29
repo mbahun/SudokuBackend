@@ -2,7 +2,7 @@
 Backend implementation (.NET 7) supporting online Sudoku. Sudoku application (https://github.com/mbahun/Sudoku) is used for game generation.
 
 ## Features
-Backend is implemented using layered (onion) architecture as explained in the book: https://code-maze.com/ultimate-aspnetcore-webapi-second-edition/ 
+Backend is implemented using layered (onion) architecture as explained in the [book](https://code-maze.com/ultimate-aspnetcore-webapi-second-edition/ "book").
 
 Sudoku backend provides restful API to play online Sudoku. Included are: Swagger documentation, authentication (MS Identity), request rate limiter, cache, Entity framework and raw database queries, DTOs, paging, inter process communication (IPC) by using shared memory (Windows) and shared file (Linux), EF migrations, Postman collection for all requests… 
 
@@ -10,7 +10,7 @@ MS SQL database is used to store generated games, users and high scores.
 
 ## How to run
 ### Windows
-- Open *appsettings.json* and input correct connection string for MS SQL server. Build Sudoku application (https://github.com/mbahun/Sudoku) and copy executable to *External* directory (or anywhere else; just remember to change the *externalAppPath* variable!).
+- Open *appsettings.json* and input correct connection string for MS SQL server. Build [Sudoku application](https://github.com/mbahun/Sudoku "Sudoku application") and copy executable to *External* directory (or anywhere else; just remember to change the *externalAppPath* variable!).
 
 - Run migrations: `update-database`
 
