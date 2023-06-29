@@ -1,5 +1,5 @@
 # Sudoku backend
-Backend implementation (.NET 7) supporting online Sudoku. Sudoku application (https://github.com/mbahun/Sudoku) is used for game generation.
+Backend implementation (.NET 7) supporting online Sudoku. [Sudoku application](https://github.com/mbahun/Sudoku "Sudoku application") is used for game generation.
 
 ## Features
 Backend is implemented using layered (onion) architecture as explained in the [book](https://code-maze.com/ultimate-aspnetcore-webapi-second-edition/ "book").
@@ -18,9 +18,9 @@ MS SQL database is used to store generated games, users and high scores.
 
 ### Linux
 Running the project in Linux is similar to running it in Windows, but with some consideration. 
-- The easiest way to run SQL server in Linux is by using Docker: https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker 
+- The easiest way to run SQL server in Linux is by using [Docker](https://www.docker.com "Docker") to pull [Linux container image](https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker "Linux container image").
 
-- Next, to run migrations, EF tool is needed (if already not globally installed): https://learn.microsoft.com/en-us/ef/core/cli/dotnet If necessary, set the env variable `export PATH=$PATH:~/.dotnet/tools`
+- Next, to run migrations, [EF tool](https://learn.microsoft.com/en-us/ef/core/cli/dotnet "EF tool") is needed (if already not globally installed). If necessary, set the env variable `export PATH=$PATH:~/.dotnet/tools`
 
 - Run migration from project root: `dotnet ef database update --project SudokuBackend --connection "server=localhost; database=Sudoku; User Id=sa;Password=MsSqLpAsSwOrD; Encrypt=False"`
 
